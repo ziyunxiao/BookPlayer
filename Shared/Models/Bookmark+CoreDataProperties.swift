@@ -7,12 +7,10 @@
 //
 //
 
-import Foundation
 import CoreData
-
+import Foundation
 
 extension Bookmark {
-
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Bookmark> {
         return NSFetchRequest<Bookmark>(entityName: "Bookmark")
     }
@@ -21,5 +19,4 @@ extension Bookmark {
     @NSManaged public var notes: String
     @NSManaged public var position: Double
     @NSManaged public var book: Book?
-
 }

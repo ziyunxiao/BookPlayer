@@ -24,6 +24,7 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet private weak var sleepButton: UIBarButtonItem!
     @IBOutlet private var sleepLabel: UIBarButtonItem!
     @IBOutlet private var chaptersButton: UIBarButtonItem!
+    @IBOutlet private weak var bookmarksButton: UIBarButtonItem!
     @IBOutlet private weak var moreButton: UIBarButtonItem!
     @IBOutlet private weak var backgroundImage: UIImageView!
 
@@ -52,8 +53,16 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
             self.metaViewController = viewController
         }
 
-        if let navigationController = segue.destination as? UINavigationController,
-            let viewController = navigationController.viewControllers.first as? ChaptersViewController,
+        guard let navigationController = segue.destination as? UINavigationController else { return }
+
+        if let viewController = navigationController.viewControllers.first as? BookmarksViewController {
+            viewController.bookmarks = self.currentBook.bookmarks?.array as? [Bookmark]
+            viewController.didSelectBookmark = { selectedBookmark in
+                PlayerManager.shared.jumpTo(selectedBookmark.position)
+            }
+        }
+
+        if let viewController = navigationController.viewControllers.first as? ChaptersViewController,
             let currentChapter = self.currentBook.currentChapter {
             viewController.chapters = self.currentBook.chapters?.array as? [Chapter]
             viewController.currentChapter = currentChapter
@@ -63,6 +72,7 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
                 PlayerManager.shared.jumpTo(selectedChapter.start + 0.01)
             }
         }
+
     }
 
     // Prevents dragging the view down from changing the safeAreaInsets.top
@@ -180,6 +190,8 @@ class PlayerViewController: UIViewController, UIGestureRecognizerDelegate {
             items.append(avRoutePickerBarButtonItem)
         }
 
+        items.append(spacer)
+        items.append(self.bookmarksButton)
         items.append(spacer)
         items.append(self.moreButton)
 

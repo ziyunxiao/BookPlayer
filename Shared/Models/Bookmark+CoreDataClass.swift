@@ -7,10 +7,8 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(Bookmark)
-public class Bookmark: NSManagedObject {
-
-}
+public class Bookmark: NSManagedObject {}
